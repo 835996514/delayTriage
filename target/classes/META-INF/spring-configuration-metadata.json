@@ -1,0 +1,11 @@
+{
+  "groups": [
+    {
+      "name": "delay-config",
+      "type": "com.rc.temp.db.entity.ConfigEntity",
+      "sourceType": "com.rc.temp.db.entity.ConfigEntity"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
