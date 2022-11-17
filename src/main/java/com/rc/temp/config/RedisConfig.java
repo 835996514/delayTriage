@@ -21,8 +21,6 @@ public class RedisConfig {
 
         RedisTemplate<Object, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
-        //开启redis事务支持（联用jdbc事务一起），方法上使用@Transaction注解即可
-        template.setEnableTransactionSupport(true);
 
         FastJsonRedisSerializer<Object> serializer = new FastJsonRedisSerializer<>(Object.class);
 
