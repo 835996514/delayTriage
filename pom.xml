@@ -123,18 +123,13 @@
                 </executions>
             </plugin>-->
 
-            <!--<plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
+                    <mainClass>com.rc.temp.DelayApplication</mainClass>
                 </configuration>
-            </plugin>-->
+            </plugin>
         </plugins>
     </build>
 

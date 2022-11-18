@@ -75,6 +75,17 @@ public class RegisterServiceImpl implements RegisterService {
         String shift = patientRegister.getShift();
         String planId = patientRegister.getPlanId();
         Predicate predicate = qPatientRegister.source.eq(String.valueOf(areaId));
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat dsdf = new SimpleDateFormat("yyyy-MM-dd");
+            String limitDate = dsdf.format(new Date()).concat(" ").concat("00:00:00");
+            Date limit = sdf.parse(limitDate);
+            predicate = ExpressionUtils.and(predicate,qPatientRegister.registerTime.gt(limit));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            log.error("日期转换异常",e.getMessage());
+            return new ResponseResult(ResultState.FAIL,"日期转换异常",e.getMessage());
+        }
         if(StringUtils.hasText(name)){
             predicate = ExpressionUtils.and(predicate,qPatientRegister.name.like("%"+name+"%"));
         }
