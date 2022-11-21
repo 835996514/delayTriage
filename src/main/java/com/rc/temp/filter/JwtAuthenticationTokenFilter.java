@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Objects;
 
 @Component
@@ -35,13 +36,28 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         }
 
         //解析token
-        String userId;
+        String userId="";
         try {
             Claims claims = JwtUtil.parseJWT(token);
             userId = claims.getSubject();
+            int i = claims.getExpiration().compareTo(new Date(System.currentTimeMillis()));
+            if(i != 1){
+                String redisKey = "delay:login:"+userId;
+                LoginUser loginUser = redisCache.getCacheObject(redisKey);
+                String path = request.getServletPath();
+                if(loginUser != null && !path.equals("user/login")){
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    request.getRequestDispatcher("/user/tokenErr").forward(request,response);
+                    return;
+                }
+            }
         }catch (Exception e){
             e.printStackTrace();
-            throw new RuntimeException("token非法");
+            request.setAttribute("loginError","token非法");
+            request.getRequestDispatcher("/user/tokenErr").forward(request,response);
+            return;
+//            throw new RuntimeException("token非法");
         }
 
         //根据token解析出来的userId去redis中获取用户信息
@@ -50,7 +66,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
         //token能解析成功，说明用户曾经登录过（合法token），若此时redis中无此用户信息，说明已经过期或退出了导致token失效，需要用户再次登录
         if(Objects.isNull(loginUser)){
-            throw new RuntimeException("用户未登录");
+            request.setAttribute("loginError","用户未登录");
+            request.getRequestDispatcher("/user/tokenErr").forward(request,response);
+            return;
+//            throw new RuntimeException("用户未登录");
         }
 
         //存入SecurityContextHolder（使得authentication对象供后续执行链调用）

@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @RequestMapping("/user")
 @RestController
 public class LoginController {
@@ -24,5 +27,10 @@ public class LoginController {
     @GetMapping("/logout")
     public ResponseResult logOut(){
         return loginService.logout();
+    }
+
+    @RequestMapping("/tokenErr")
+    public ResponseResult clearUser(HttpServletResponse response, HttpServletRequest request){
+        return loginService.tokenErr(response,request);
     }
 }

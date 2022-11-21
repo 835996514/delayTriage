@@ -45,8 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/login","/register/getAreas").anonymous();
-//                .anyRequest().authenticated();
+                .antMatchers("/user/login","/register/getAreas","/","/static/**","/*.js").anonymous()
+                .anyRequest().authenticated();
 
         //将token校验过滤器添加到过滤器链中，并且位于UsernamePasswordAuthenticationFilter用户密码验证之前
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
