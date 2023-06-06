@@ -73,9 +73,12 @@ public class LoginServiveImpl implements LoginService {
     public ResponseResult tokenErr(HttpServletResponse response, HttpServletRequest request) {
         SecurityContext context = SecurityContextHolder.getContext();
         response.setStatus(401);
-        if (context != null) {
+        if (context != null && context.getAuthentication() != null) {
             Authentication authentication = context.getAuthentication();
             Object object = authentication.getPrincipal();
+            if(Objects.isNull(object)){
+                return new ResponseResult(ResultState.FAIL, "authentication为null");
+            }
             LoginUser loginUser = (LoginUser) authentication.getPrincipal();
             //用户未登录或token过期,清除数据
             log.warn("token过期");
