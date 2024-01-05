@@ -13,6 +13,6 @@ import java.util.List;
 @Repository
 public interface PlanRepository extends JpaRepository<Plan,String>, QuerydslPredicateExecutor<Plan> {
 
-    @Query("select new Plan(p.planId,p.name) from Plan p where p.date = :today and p.planId in :plans")
-    List<Plan> getAllPlans(@Param("today") Date today, @Param("plans") String[] plans);
+    @Query("select new Plan(p.planId,p.name) from Plan p where p.date = :today and p.departmentCode in :departmentCode")
+    List<Plan> getAllPlans(@Param("today") Date today, @Param("departmentCode") String[] departmentCode);
 }

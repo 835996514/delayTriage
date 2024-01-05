@@ -77,12 +77,11 @@ public class RegisterController {
             return new ResponseResult(ResultState.FAIL,"日期错误",e.getMessage());
         }
 
-        String[] og = {"产科诊室一","产科诊室二","妇科诊室一","妇科诊室二"};
-        String[] plans = new String[planIds.length+og.length];
-        System.arraycopy(planIds,0,plans,0,planIds.length);
-        System.arraycopy(og,0,plans,planIds.length,og.length);
-
-        List<Plan> list = planRepository.getAllPlans(date, plans);
+//        String[] og = {"产科诊室一","产科诊室二","妇科诊室一","妇科诊室二"};
+//        String[] plans = new String[planIds.length+og.length];
+//        System.arraycopy(planIds,0,plans,0,planIds.length);
+//        System.arraycopy(og,0,plans,planIds.length,og.length);
+        List<Plan> list = planRepository.getAllPlans(date, planIds);
         return new ResponseResult(ResultState.SUCCESS,"成功",list);
     }
 
